@@ -4,11 +4,11 @@
   connection: local
   tasks:
     - name: stop current running container
-      command: docker stop iattend-jen
+      command: docker stop elshwaihi/iattend-jen
       ignore_errors: yes
 
     - name: remove stopped container
-      command: docker rm iattend-jen
+      command: docker rm elshwaihi/iattend-jen
       ignore_errors: yes
 
     - name: remove comingsoon-image
@@ -23,4 +23,4 @@
       ignore_errors: yes
 
     - name: run container
-      command: docker run -d --name elshwaihi/iattend-jen -p 8000:8000 iattend-jen
+      command: docker run -d --name elshwaihi/iattend-jen -p 8000:8000 elshwaihi/iattend-jen
