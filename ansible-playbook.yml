@@ -23,4 +23,4 @@
       ignore_errors: yes
 
     - name: run container
-      command: docker run -d --name iattend-jen -p 8000:80 iattend-jen
+      command: docker run -d --name iattend-jen -p 8000:8000 iattend-jen
