@@ -23,29 +23,4 @@
       ignore_errors: yes
 
     - name: run container
-      command: docker run -d --name iattend-jen -p 8000:80 ---
-- name: "Build a container with ansible"
-  hosts: localhost
-  connection: local
-  tasks:
-    - name: stop current running container
-      command: docker stop iattend-jen
-      ignore_errors: yes
-
-    - name: remove stopped container
-      command: docker rm iattend-jen
-      ignore_errors: yes
-
-    - name: remove comingsoon-image
-      command: docker rmi iattend-jen
-      ignore_errors: yes
-
-    - name: build docker image using the Dockerfile
-      command: docker build -t iattend-jen .
-
-    - name: Push Image to dockerhub
-      command: docker push iattend-jen
-      ignore_errors: yes
-
-    - name: run container
       command: docker run -d --name iattend-jen -p 8000:80 iattend-jen
