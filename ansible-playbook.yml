@@ -19,8 +19,8 @@
       command: docker build -t elshwaihi/iattend-jen .
 
     - name: Push Image to dockerhub
-      command: docker push iattend-jen
+      command: docker push elshwaihi/iattend-jen
       ignore_errors: yes
 
     - name: run container
-      command: docker run -d --name iattend-jen -p 8000:8000 elshwaihi/iattend-jen
+      command: docker run -d --name elshwaihi/iattend-jen -p 8000:8000 iattend-jen
