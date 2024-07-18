@@ -4,6 +4,12 @@ FROM python:3.11-slim
 # Set the working directory
 WORKDIR /django
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libmariadb-dev-compat \
+    pkg-config
+
 # Install dependencies
 COPY requirements.txt .
 
