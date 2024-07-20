@@ -1,5 +1,5 @@
 ---
-- name: "Build a container with ansible"
+- name: "Build with ansible"
   hosts: localhost
   connection: local
   tasks:
