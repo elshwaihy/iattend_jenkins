@@ -3,14 +3,6 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: stop current running container
-      command: docker stop iattend-jen
-      ignore_errors: yes
-
-    - name: remove stopped container
-      command: docker rm iattend-jen
-      ignore_errors: yes
-
     - name: remove image
       command: docker rmi elshwaihi/iattend-jen
       ignore_errors: yes
@@ -21,6 +13,3 @@
     - name: Push Image to dockerhub
       command: docker push elshwaihi/iattend-jen
       ignore_errors: yes
-
-    - name: run container
-      command: docker run -d --name iattend-jen -p 8000:8000 elshwaihi/iattend-jen
