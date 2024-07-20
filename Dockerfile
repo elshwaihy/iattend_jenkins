@@ -23,5 +23,5 @@ ENV PYTHONUNBUFFERED=1
 # Collect static files
 EXPOSE 8000
 
-# Start the Django server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run migrations and then start the server
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
