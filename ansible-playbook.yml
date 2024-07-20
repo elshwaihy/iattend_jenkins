@@ -13,3 +13,10 @@
     - name: Push Image to dockerhub
       command: docker push elshwaihi/iattend-jen
       ignore_errors: yes
+      
+    - name: stop and remove containers
+      command: docker-compose down
+      ignore_errors: yes
+
+    - name: build docker-compose
+      command: docker-compose up -d 
