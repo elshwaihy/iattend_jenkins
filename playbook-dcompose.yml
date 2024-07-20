@@ -11,13 +11,5 @@
     command: docker rmi elshwaihi/iattend-jen
     ignore_errors: yes
 
-  - name: remove mysql image
-    command: docker rmi mysql:8.0
-    ignore_errors: yes
-
-  - name: remove web image
-    command: docker rmi web
-    ignore_errors: yes
-
   - name: build docker-compose
     command: docker-compose up -d 
