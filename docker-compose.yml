@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    container_name: db
+    container_name: mysqldb
     image: mysql:8.0
     restart: always
     volumes:
@@ -19,17 +19,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    networks:
+      - backend
 
   web:
-    build: .
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: django_cont
+    image: elshwaihi/iattend-jen
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
       - db:
-          condition: service_healthy
+          condition: healthcheck
     environment:
       - DEBUG=1
       - DB_NAME=django_db
@@ -37,6 +39,22 @@ services:
       - DB_PASSWORD=djangopassword
       - DB_HOST=db
       - DB_PORT=3306
+    networks:
+      - backend
+      - frontend
+
+  proxy:
+    container_name: nginx_proxy
+    image: nginx
+    volumes:
+    
+    networks:
+      - frontend
+    depends_on:
+      - web
 
 volumes:
   db_data:
+networks:
+  backend:
+  frontend:
