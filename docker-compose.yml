@@ -25,7 +25,7 @@ services:
 
   web:
     container_name: django_cont
-    image: iattend-jen2
+    image: muhammadelmansi/depi_final
     depends_on:
       db:
         condition: service_healthy
@@ -38,24 +38,15 @@ services:
       - DB_PASSWORD=djangopassword
       - DB_HOST=db
       - DB_PORT=3306
+    ports:
+      - 8000:8000
     networks:
       - backend
       - frontend
 
-  proxy:
-    container_name: nginx_proxy
-    image: nginx
-    ports:
-      - 80:80
-    volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - frontend
-    depends_on:
-      - web
-
 volumes:
   db_data:
+
 networks:
   backend:
   frontend:

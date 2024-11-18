@@ -1,22 +1,39 @@
 ---
 - name: "Build with ansible"
-  hosts: localhost
-  connection: local
+  hosts: my_ec2
   tasks:
+    - name: Set the working directory
+      ansible.builtin.set_fact:
+        workdir: /home/ubuntu/depiii
+
+    - name: Log in to Docker Hub
+      shell: echo "{{ docker_password }}" | docker login -u "{{ docker_username }}" --password-stdin
+      #no_log: true  # Prevent logging sensitive information
+
     - name: remove image
       command: docker rmi elshwaihi/iattend-jen
       ignore_errors: yes
+      args:
+        chdir: "{{ workdir }}"
 
     - name: build docker image using the Dockerfile
       command: docker build -t elshwaihi/iattend-jen .
+      args:
+        chdir: "{{ workdir }}"
 
     - name: Push Image to dockerhub
       command: docker push elshwaihi/iattend-jen
       ignore_errors: yes
+      args:
+        chdir: "{{ workdir }}"
       
     - name: stop and remove containers
       command: docker-compose down
       ignore_errors: yes
+      args:
+        chdir: "{{ workdir }}"
 
     - name: build docker-compose
-      command: docker-compose up -d 
+      command: docker-compose up -d
+      args:
+        chdir: "{{ workdir }}"

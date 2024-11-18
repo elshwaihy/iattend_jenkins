@@ -1,19 +1,35 @@
 pipeline {
     agent any
-
-    environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub')
-	}
+    
     stages {
-        stage('Docker Login') {
+        stage('Copy Files to EC2') {
             steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                withCredentials([sshUserPrivateKey(credentialsId: 'ec2_key', keyFileVariable: 'keyfile')]) {
+                    sh '''
+                        ssh -i $keyfile -o StrictHostKeyChecking=no ubuntu@98.83.160.147 "rm -rf /home/ubuntu/depiii"
+                        scp -i $keyfile -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/depiii ubuntu@98.83.160.147:/home/ubuntu
+                    '''
+                }
             }
         }
-        stage('Build & push & run cont') {
+
+        stage('Build, Push & Run Container') {
             steps {
-                sh "ansible-playbook ansible-playbook.yml"
+                withCredentials([sshUserPrivateKey(credentialsId: 'ec2_key', keyFileVariable: 'keyfile')]) {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerpass', usernameVariable: 'dockeruser')]) {
+                        sh 'ansible-playbook -i inventory.ini ansible-playbook.yml --private-key=$keyfile -e "docker_username=${dockeruser} docker_password=${dockerpass}"'
+                    }
+                }
             }
         }
+    }
+
+    post { 
+        always { 
+            script { 
+                def emailNotification = load 'mail-notification.groovy'
+                emailNotification.sendEmailNotification()
+            } 
+        } 
     } 
 }
